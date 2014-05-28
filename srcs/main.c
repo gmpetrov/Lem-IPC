@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 21:19:36 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 22:24:14 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,35 @@ void	exit_error(char *msg)
 {
 	printf("\033[31m%s\033[0m", msg);
 	exit(0);
+}
+
+void	lock(void)
+{
+	int				sem_id;
+	struct	sembuf	buf;
+
+	sem_id = semget(KEY, 1, 0666);
+	if (sem_id == -1)
+	{
+		sem_id = semget(KEY, 1, 0666 | IPC_CREAT);
+		semctl(sem_id, SETVAL, 1);
+	}
+	buf.sem_num = 0;
+	buf.sem_op = -1;
+	buf.sem_flg = 0;
+	semop(sem_id, &buf, 0);
+}
+
+void	unlock(void)
+{
+	struct sembuf	buf;
+	int				sem_id;
+
+	sem_id = semget(KEY, 1, 0666);
+	buf.sem_num = 0;
+	buf.sem_op = 1;
+	buf.sem_flg = 0;
+	semop(sem_id, &buf, 0);
 }
 
 char	**create_map(void)
@@ -112,7 +141,7 @@ void	team_handle_init(t_share *shared)
 	shared->team[MAX_TEAM] = 0;
 }
 
-int		init_shm(t_share *shared, int *sem_id)
+int		init_shm(t_share *shared)
 {
 	int			shm_id;
 
@@ -124,7 +153,9 @@ int		init_shm(t_share *shared, int *sem_id)
 	if (shared->first == TRUE)
 	{
 		printf("OK\n");
+		lock();
 		print_map(shared->map, shared);
+		unlock();
 	}
 	else
 	{
@@ -134,7 +165,6 @@ int		init_shm(t_share *shared, int *sem_id)
 		fill_map(shared);
 		print_map(shared->map, shared);
 		shared->end = FALSE;
-		*sem_id = semget(KEY, 1, 0666 | IPC_CREAT);
 		shared->first = TRUE;
 	}
 	if (shmdt(shared) == -1)
@@ -196,11 +226,13 @@ void	create_player(t_share *shared, int shm_id, t_player *player)
 	int		i;
 
 	i = 0;
+	lock();
 	shared = shmat(shm_id, (void *)0, 0);
 	register_team(shared, player);
 	put_player_on_map(shared, player);
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
+	unlock();
 }
 
 void	test(t_share *shared, int shm_id)
@@ -241,9 +273,22 @@ void	move(t_share *shared, t_player *player)
 
 void	play(t_share *shared, int shm_id, t_player *player)
 {
+	lock();
 	player->danger = FALSE;
 	player->attack = FALSE;
 	shared = shmat(shm_id, (void *)0, 0);
+
+	/* TEST msgq */
+
+	t_msgbuf	buf;
+	int			msg_id;
+
+	if ((msg_id = msgget(KEY, 0666 | IPC_CREAT)) < 0)
+		exit_error("msgget() error\n");
+	buf.mtype = 1;
+	ft_strncpy(buf.mtext, "salut", 5);
+	if (msgsnd(msg_id, &buf, 5, IPC_NOWAIT) < 0)
+		exit_error("msgsnd() error\n");
 	while (shared->end == FALSE)
 	{
 		move(shared, player);
@@ -251,6 +296,7 @@ void	play(t_share *shared, int shm_id, t_player *player)
 	}
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
+	unlock();
 }
 
 int		main(int ac, char **av)
@@ -263,13 +309,12 @@ int		main(int ac, char **av)
 	t_share		shared;
 	t_player	player;
 	int			shm_id;
-	int			sem_id;
 
 	if (ac != 2)
 		exit_error("[USAGE] - ./lemipc <team>\n");
 	player.team = av[1][0];
 	printf("%c\n", player.team);
-	shm_id = init_shm(&shared, &sem_id);
+	shm_id = init_shm(&shared);
 	create_player(&shared, shm_id, &player);
 	play(&shared, shm_id, &player);
 	return (0);

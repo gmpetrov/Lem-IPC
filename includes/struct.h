@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 21:27:53 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 22:23:20 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,11 @@ typedef struct		s_player
 	int				danger;
 	int				attack;	
 }					t_player;
+
+typedef struct		s_msgbuf
+{
+    long			mtype;
+    char			mtext[1024];
+}					t_msgbuf;
 
 #endif
