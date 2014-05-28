@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 19:24:44 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 20:02:33 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ void	print_map(char map[HEIGHT][WIDTH], t_share *shared)
 			else if (map[i][j] == shared->team[0])
 			{		
 				ft_putstr("\033[32m\u25CD\033[0m");
+				write(1, " ", 1);
+			}
+			else if (map[i][j] == shared->team[1])
+			{
+				ft_putstr("\033[31m\u25CD\033[0m");
 				write(1, " ", 1);
 			}
 			write(1, " ", 1);
