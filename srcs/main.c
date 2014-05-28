@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 20:02:33 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 21:19:36 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	team_handle_init(t_share *shared)
 	shared->team[MAX_TEAM] = 0;
 }
 
-int		init_shm(t_share *shared)
+int		init_shm(t_share *shared, int *sem_id)
 {
 	int			shm_id;
 
@@ -134,6 +134,7 @@ int		init_shm(t_share *shared)
 		fill_map(shared);
 		print_map(shared->map, shared);
 		shared->end = FALSE;
+		*sem_id = semget(KEY, 1, 0666 | IPC_CREAT);
 		shared->first = TRUE;
 	}
 	if (shmdt(shared) == -1)
@@ -215,7 +216,7 @@ void	test(t_share *shared, int shm_id)
 /*
 void	analyze(t_share *shared, t_player *player)
 {
-	if ()
+	check_if_dead(shared, player);
 }
 */
 
@@ -262,12 +263,13 @@ int		main(int ac, char **av)
 	t_share		shared;
 	t_player	player;
 	int			shm_id;
+	int			sem_id;
 
 	if (ac != 2)
 		exit_error("[USAGE] - ./lemipc <team>\n");
 	player.team = av[1][0];
 	printf("%c\n", player.team);
-	shm_id = init_shm(&shared);
+	shm_id = init_shm(&shared, &sem_id);
 	create_player(&shared, shm_id, &player);
 	play(&shared, shm_id, &player);
 	return (0);
