@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 17:59:37 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 18:51:57 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,16 @@ typedef struct		s_share
 	int				first;
 	char			team[MAX_TEAM + 1];
 	int				nb_team;
+	int				end;
 }					t_share;
 
 typedef struct		s_player
 {
-	char			team;			
+	char			team;
+	int				x;
+	int				y;
+	int				danger;
+	int				attack;	
 }					t_player;
 
 #endif
