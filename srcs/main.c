@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 16:36:14 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 18:14:38 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	print_map(char map[HEIGHT][WIDTH])
 
 	i = 0;
 	j = 0;
-	system("clear");
+//	system("clear");
 	while (i < HEIGHT)
 	{
 		while (j < WIDTH)
@@ -92,7 +92,20 @@ void	fill_map(t_share *shared)
 
 }
 
-void	init_shm(t_share *shared)
+void	team_handle_init(t_share *shared)
+{
+	int		i;
+
+	i = 0;
+	while (i < MAX_TEAM)
+	{
+		shared->team[i] = '.';
+		i++;
+	}
+	shared->team[MAX_TEAM] = 0;
+}
+
+int		init_shm(t_share *shared)
 {
 	int			shm_id;
 
@@ -104,45 +117,66 @@ void	init_shm(t_share *shared)
 	if (shared->first == TRUE)
 	{
 		printf("OK\n");
-		printf("%d\n", shared->fuck);
-		create_player(shared);
 		print_map(shared->map);
 	}
 	else
 	{
-		printf("Creating MAP\n");
-//		shared->map = create_map();
+		printf("Creating GameP\n");
+		team_handle_init(shared);
+		shared->nb_team = 0;
 		fill_map(shared);
-		create_player(shared);
 		print_map(shared->map);
-		shared->fuck = 42;
 		shared->first = TRUE;
 	}
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
+	return (shm_id);
 }
 
-void	create_player(t_share *shared)
+void	register_team(t_share *shared, t_player *player)
 {
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
-	while (j < HEIGHT)
+	while (i < MAX_TEAM)
 	{
-		while (i < WIDTH)
+		if (shared->team[i] == player->team)
 		{
-			if (shared->map[j][i] == '.')
-			{
-				shared->map[j][i] = '1';
-				return ;
-			}
-			i++;
+			printf("%s\n", shared->team);
+			return ;
 		}
-		i = 0;
-		j++;
+		else if (shared->team[i] == '.')
+		{
+			shared->team[i] = player->team;
+			shared->nb_team++;
+			printf("nb of team : %d %s\n", shared->nb_team, shared->team);
+			return ;
+		}
+		i++;
 	}
+	printf("%s\n", shared->team);
+}
+
+void	create_player(t_share *shared, int shm_id, t_player *player)
+{
+	int		i;
+
+	i = 0;
+	shared = shmat(shm_id, (void *)0, 0);
+	register_team(shared, player);
+	if (shmdt(shared) == -1)
+		exit_error("shmdt() error\n");
+}
+
+void	test(t_share *shared, int shm_id)
+{
+	shared = shmat(shm_id, (void *)0, 0);
+
+	shared->map[5][5] = '1';
+	print_map(shared->map);
+
+	if (shmdt(shared) == -1)
+		exit_error("shmdt() error\n");
 }
 
 int		main(int ac, char **av)
@@ -153,11 +187,14 @@ int		main(int ac, char **av)
 //	ft_putstr("\u272C\n");
 //	ft_putstr("\033[32mlemipc \033[0m\n");
 	t_share		shared;
+	t_player	player;
+	int			shm_id;
 
-	(void)av;
 	if (ac != 2)
 		exit_error("[USAGE] - ./lemipc <team>\n");
-	init_shm(&shared);
-	create_player(&shared);
+	player.team = av[1][0];
+	printf("%c\n", player.team);
+	shm_id = init_shm(&shared);
+	create_player(&shared, shm_id, &player);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:20:20 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 16:18:55 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/28 18:00:56 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@
 void	fill_map(t_share *shared);
 void	print_map(char map[HEIGHT][WIDTH]);
 char	**create_map(void);
-void	create_player(t_share *shared);
+void	create_player(t_share *shared, int shm_id, t_player *player);
 
 #endif
