@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 18:06:47 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/29 22:04:37 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,50 @@
 #include <sys/msg.h>
 #include "lemipc.h"
 
+char			is_locked(void)
+{
+  int			val;
+
+  val = semctl(sem_init(), 0, GETVAL);
+  if (val == -1)
+    exit_error("semctl() error\n");
+  return (val);
+}
+
+int			sem_init(void)
+{
+  static int		semid = 0;
+
+  if (semid == 0)
+    {
+      if ((semid = semget(KEY, 1, IPC_CREAT | 0666)) == -1)
+		exit_error("semget() error\n");
+      if (semctl(semid, 0, SETVAL, 1) == -1)
+		exit_error("semctl() error\n");
+    }
+  return (semid);
+}
+
 void	lock(void)
 {
-	int				sem_id;
-	struct	sembuf	buf;
+	int		val;
 
-
-	ft_bzero(&buf, sizeof(buf));
-	sem_id = semget(KEY, 1, 0666);
-	if (sem_id == -1)
-	{
-		sem_id = semget(KEY, 1, 0666 | IPC_CREAT);
-		semctl(sem_id, SETVAL, 1);
-	}
-	buf.sem_num = 0;
-	buf.sem_op = -1;
-	buf.sem_flg = 0;
-	semop(sem_id, &buf, 0);
+	if (is_locked())
+		return ;
+	val = semctl(sem_init(), 0, SETVAL, 1);
+	if (val == -1)
+		exit_error("semctl() error\n");
 }
 
 void	unlock(void)
 {
-	struct sembuf	buf;
-	int				sem_id;
+	int		val;
 
-	ft_bzero(&buf, sizeof(buf));
-	sem_id = semget(KEY, 1, 0666);
-	buf.sem_num = 0;
-	buf.sem_op = 1;
-	buf.sem_flg = 0;
-	semop(sem_id, &buf, 0);
+	if (!is_locked())
+		return ;
+	val = semctl(sem_init(), 0, SETVAL, 0);
+	if (val == -1)
+		exit_error("semctl() error\n");
 }
 void	print_map(char map[HEIGHT][WIDTH], t_share *shared)
 {
@@ -92,7 +106,7 @@ int		init_shm(t_share *shared)
 {
 	int			shm_id;
 
-	if ((shm_id = shmget(KEY, sizeof(shared), 0644 | IPC_CREAT)) == -1)
+	if ((shm_id = shmget(KEY, sizeof(shared) * HEIGHT * WIDTH, 0644 | IPC_CREAT)) == -1)
 		exit_error("shmget() error\n");
 	shared = shmat(shm_id, (void *)0, 0);
 	if (shared == (t_share *)-1)
@@ -314,14 +328,14 @@ int		check_if_dead(t_share *shared, t_player *player)
 	int		nb;
 
 	nb = 0;
-	if ((player->x - 1 >= 0 && player->y - 1 >= 0) &&
+	if (((player->x - 1 >= 0) && (player->y - 1 >= 0)) &&
 			(shared->map[player->y - 1][player->x - 1] != '.' &&
 			 shared->map[player->y - 1][player->x - 1] != player->team))
 		nb++;
 	if ((player->y - 1 >= 0) && (shared->map[player->y - 1][player->x] != '.' &&
 			shared->map[player->y - 1][player->x] != player->team))
 		nb++;
-	if ((player->x + 1 < WIDTH && player->y - 1 >= 0) &&
+	if (((player->x + 1 < WIDTH) && (player->y - 1 >= 0)) &&
 			(shared->map[player->y - 1][player->x - 1] != '.' &&
 			 shared->map[player->y - 1][player->x - 1] != player->team))
 		nb++;
@@ -335,7 +349,7 @@ int		check_if_dead(t_share *shared, t_player *player)
 	if ((player->y + 1 < HEIGHT) && (shared->map[player->y + 1][player->x] != '.' &&
 				shared->map[player->y + 1][player->x] != player->team))
 		nb++;
-	if ((player->y + 1 < HEIGHT && player->x - 1 >= 0) &&
+	if (((player->y + 1 < HEIGHT) && (player->x - 1 >= 0)) &&
 			(shared->map[player->y + 1][player->x - 1] != '.' &&
 			shared->map[player->y + 1][player->x - 1] != player->team))
 		nb++;
