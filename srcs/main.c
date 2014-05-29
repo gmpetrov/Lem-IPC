@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 17:39:48 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/29 18:06:47 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,6 +309,47 @@ void	find_enemy(t_share *shared, t_player *player)
 	}
 }
 
+int		check_if_dead(t_share *shared, t_player *player)
+{
+	int		nb;
+
+	nb = 0;
+	if ((player->x - 1 >= 0 && player->y - 1 >= 0) &&
+			(shared->map[player->y - 1][player->x - 1] != '.' &&
+			 shared->map[player->y - 1][player->x - 1] != player->team))
+		nb++;
+	if ((player->y - 1 >= 0) && (shared->map[player->y - 1][player->x] != '.' &&
+			shared->map[player->y - 1][player->x] != player->team))
+		nb++;
+	if ((player->x + 1 < WIDTH && player->y - 1 >= 0) &&
+			(shared->map[player->y - 1][player->x - 1] != '.' &&
+			 shared->map[player->y - 1][player->x - 1] != player->team))
+		nb++;
+	if ((player->x + 1 < WIDTH) && (shared->map[player->y][player->x + 1] != '.' &&
+				shared->map[player->y][player->x + 1] != player->team))
+		nb++;
+	if ((player->x + 1 < WIDTH && player->y + 1 < HEIGHT) &&
+			(shared->map[player->y + 1][player->x + 1] != '.' &&
+			 shared->map[player->y + 1][player->x + 1] != player->team))
+		nb++;
+	if ((player->y + 1 < HEIGHT) && (shared->map[player->y + 1][player->x] != '.' &&
+				shared->map[player->y + 1][player->x] != player->team))
+		nb++;
+	if ((player->y + 1 < HEIGHT && player->x - 1 >= 0) &&
+			(shared->map[player->y + 1][player->x - 1] != '.' &&
+			shared->map[player->y + 1][player->x - 1] != player->team))
+		nb++;
+	if ((player->x - 1 >= 0) && (shared->map[player->y][player->x - 1] != '.' &&
+				shared->map[player->y][player->x - 1] != player->team))
+		nb++;
+	if (nb >= 2)
+	{
+		shared->map[player->y][player->x] = '.';
+		return (-1);
+	}
+	return (0);
+}
+
 void	play(t_share *shared, int shm_id, t_player *player)
 {
 	player->danger = FALSE;
@@ -319,6 +360,11 @@ void	play(t_share *shared, int shm_id, t_player *player)
 	while (shared->end == FALSE)
 	{
 		lock();
+		if (check_if_dead(shared, player) == -1)
+		{
+			unlock();
+			break ;
+		}
 //		recv_pos(player);
 		find_enemy(shared, player);
 		move(shared, player);
