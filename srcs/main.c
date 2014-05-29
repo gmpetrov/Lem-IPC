@@ -6,10 +6,11 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 14:44:33 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/29 17:39:48 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <time.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -24,6 +25,8 @@ void	lock(void)
 	int				sem_id;
 	struct	sembuf	buf;
 
+
+	ft_bzero(&buf, sizeof(buf));
 	sem_id = semget(KEY, 1, 0666);
 	if (sem_id == -1)
 	{
@@ -41,6 +44,7 @@ void	unlock(void)
 	struct sembuf	buf;
 	int				sem_id;
 
+	ft_bzero(&buf, sizeof(buf));
 	sem_id = semget(KEY, 1, 0666);
 	buf.sem_num = 0;
 	buf.sem_op = 1;
@@ -146,6 +150,20 @@ void	put_player_on_map(t_share *shared, t_player *player)
 
 	i = 0;
 	j = 0;
+	srand(time(NULL));
+	while (42)
+	{
+		i = rand() % WIDTH;
+		j = rand() % HEIGHT;
+		if (shared->map[j][i] == '.')
+		{
+			player->x = i;
+			player->y = j;
+			shared->map[j][i] = player->team;
+			return ;
+		}
+	}
+	/*
 	while (j < HEIGHT)
 	{
 		while (i < WIDTH)
@@ -162,6 +180,7 @@ void	put_player_on_map(t_share *shared, t_player *player)
 		i = 0;
 		j++;
 	}
+	*/
 }
 
 void	create_player(t_share *shared, int shm_id, t_player *player)
@@ -194,7 +213,7 @@ void	analyze(t_share *shared, t_player *player)
 	check_if_dead(shared, player);
 }
 */
-
+/*
 void	move(t_share *shared, t_player *player)
 {
 	if ((player->x + 1 < WIDTH) && shared->map[player->y][player->x + 1] == '.')
@@ -212,6 +231,27 @@ void	move(t_share *shared, t_player *player)
 	}
 	else
 		shared->end = TRUE;
+}
+*/
+
+void	move(t_share *shared, t_player *player)
+{
+	if (player->ad_x < player->x && player->ad_y < player->y)
+	   case_1(shared, player);
+	else if (player->ad_x == player->x && player->ad_y < player->y)
+		case_2(shared, player);
+	else if (player->ad_x > player->x && player->ad_y < player->y)
+		case_3(shared, player);
+	else if (player->ad_x > player->x && player->ad_y == player->y)
+		case_4(shared, player);
+	else if (player->ad_x > player->x && player->ad_y > player->y)
+		case_5(shared, player);
+	else if (player->ad_x == player->x && player->ad_y > player->y)
+		case_6(shared, player);
+	else if (player->ad_x < player->x && player->ad_y > player->y)
+		case_7(shared, player);
+	else if (player->ad_x < player->x && player->ad_y == player->y)	
+		case_8(shared, player);
 }
 
 void	send_pos(t_player *player)
@@ -243,20 +283,50 @@ void	recv_pos(t_player *player)
 	printf("\n recv BUF : %s\n", buf.mtext);
 }
 
+void	find_enemy(t_share *shared, t_player *player)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (j < HEIGHT)
+	{
+		while (i < WIDTH)
+		{
+			if (shared->map[j][i] != player->team && shared->map[j][i] != '.')
+			{
+				player->ad_x = i;
+				player->ad_y = j;
+			//	send_pos(player);
+				player->attack = TRUE;
+				return ;
+			}
+			i++;
+		}
+		i = 0;
+		j++;
+	}
+}
+
 void	play(t_share *shared, int shm_id, t_player *player)
 {
-	lock();
 	player->danger = FALSE;
 	player->attack = FALSE;
+	player->ad_x = 0;
+	player->ad_y = 0;
 	shared = shmat(shm_id, (void *)0, 0);
 	while (shared->end == FALSE)
 	{
+		lock();
+//		recv_pos(player);
+		find_enemy(shared, player);
 		move(shared, player);
 		print_map(shared->map, shared);
+		unlock();
 	}
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
-	unlock();
 }
 
 int		main(int ac, char **av)

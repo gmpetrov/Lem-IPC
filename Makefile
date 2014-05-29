@@ -6,12 +6,12 @@
 #    By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/05/26 19:06:18 by gpetrov           #+#    #+#              #
-#    Updated: 2014/05/29 14:44:34 by gpetrov          ###   ########.fr        #
+#    Updated: 2014/05/29 16:48:13 by gpetrov          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= lemipc
-FILES	= main.c init.c tools.c
+FILES	= main.c case.c init.c tools.c
 SRCS	= $(addprefix srcs/, $(FILES))
 OBJS	= $(SRCS:srcs/%.c=.obj/%.o)
 INC		= -I includes -I libft/includes -I /usr/X11/include

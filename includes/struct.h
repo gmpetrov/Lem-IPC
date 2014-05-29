@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 14:19:47 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/29 15:56:19 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ typedef struct		s_player
 	int				x;
 	int				y;
 	int				danger;
-	int				attack;	
+	int				attack;
+	int				ad_x;
+	int				ad_y;
 }					t_player;
 
 typedef struct		s_msgbuf
