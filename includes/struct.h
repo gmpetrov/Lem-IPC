@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/28 22:23:20 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/29 14:19:47 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define WIDTH	20
 # define HEIGHT	10
 # define MAX_TEAM 100
+# define MAX_SIZE 1024
 # include "lemipc.h"
 
 typedef struct		s_share
@@ -40,7 +41,7 @@ typedef struct		s_player
 typedef struct		s_msgbuf
 {
     long			mtype;
-    char			mtext[1024];
+    char			mtext[MAX_SIZE];
 }					t_msgbuf;
 
 #endif
