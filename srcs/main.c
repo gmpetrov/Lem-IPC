@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/30 19:32:08 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 00:03:41 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,18 @@ void	print_map(char map[HEIGHT][WIDTH], t_share *shared)
 	}
 }
 
+void		create_sem(void)
+{
+	t_data	*data;
+
+	data = init_data();
+	if ((data->sem_id = semget(data->key, HEIGHT * WIDTH, 0666 | IPC_CREAT | IPC_EXCL)) == -1)
+		exit_error("semget() error\n");
+	if (semctl(data->sem_id, 1, SETALL, data->array) == -1)
+		exit_error("semctl() error\n");
+	printf("Semaphores Created\n");
+}
+
 void		init_shm(t_share *shared)
 {
 	char		*pwd;
@@ -141,6 +153,7 @@ void		init_shm(t_share *shared)
 			//		print_map(shared->map, shared);
 			shared->end = FALSE;
 			shared->first = TRUE;
+			//create_sem();
 			if (shmdt(shared) == -1)
 				exit_error("shmdt() error\n");
 		}
@@ -241,32 +254,6 @@ void	test(t_share *shared, int shm_id)
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
 }
-/*
-void	analyze(t_share *shared, t_player *player)
-{
-	check_if_dead(shared, player);
-}
-*/
-/*
-void	move(t_share *shared, t_player *player)
-{
-	if ((player->x + 1 < WIDTH) && shared->map[player->y][player->x + 1] == '.')
-	{
-		shared->map[player->y][player->x] = '.';
-		player->x++;
-		shared->map[player->y][player->x] = player->team;
-	}
-	else if (player->x + 1 == WIDTH && (player->y + 1 < HEIGHT))
-	{	
-		shared->map[player->y][player->x] = '.';
-		player->x = 0;
-		player->y++;
-		shared->map[player->y][player->x] = player->team;
-	}
-	else
-		shared->end = TRUE;
-}
-*/
 
 void	move(t_share *shared, t_player *player)
 {
@@ -300,7 +287,7 @@ void	send_pos(t_player *player)
 	(void)player;
 	if ((msg_id = msgget(data->key, 0666 | IPC_CREAT)) < 0)
 		exit_error("msgget() error\n");
-	buf.mtype = (int)player->team;
+	buf.mtype = player->team;
 	ft_strncpy(buf.mtext, "salut", 5);
 	if (msgsnd(msg_id, &buf, 5, IPC_NOWAIT) < 0)
 		exit_error("msgsnd() error\n");
@@ -312,13 +299,21 @@ void	recv_pos(t_player *player)
 	int			msg_id;
 	t_msgbuf	buf;
 	t_data		*data;
+	int			r;
 
 	data = init_data();
 	if ((msg_id = msgget(data->key, 0666)) < 0)
-		exit_error("msgget() error\n");
-	if (msgrcv(msg_id, &buf, MAX_SIZE, (int)player->team, 0) < 0)
-		exit_error("msgrcv() error\n");	
-	printf("\n recv BUF : %s\n", buf.mtext);
+	{
+		return ;
+	//		exit_error("msgget() error\n");
+	}
+	if ((r = msgrcv(msg_id, &buf, MAX_SIZE, player->team, IPC_NOWAIT)) < 0)
+		exit_error("msgrcv() error\n");
+	if (r > 0)
+	{
+		printf("r = %d\n", r);
+		printf("\n recv BUF : %s\n", buf.mtext);
+	}
 }
 
 void	find_enemy(t_share *shared, t_player *player)
@@ -388,6 +383,77 @@ int		check_if_dead(t_share *shared, t_player *player)
 	return (0);
 }
 
+void	find_closest_enemy(t_share *shared, t_player *player )
+{
+	int		i;
+
+	i = 1;
+	while (i < WIDTH)
+	{
+		if (((player->x - i >= 0) && (player->y - i >= 0)) &&
+				(shared->map[player->y - i][player->x - i] != '.' &&
+				 shared->map[player->y - i][player->x - i] != player->team))
+		{
+			player->ad_x = player->x - i;
+			player->ad_y = player->y - i;
+			return ;
+		}
+		if ((player->y - i >= 0) && (shared->map[player->y - i][player->x] != '.' &&
+					shared->map[player->y - i][player->x] != player->team))	
+		{
+			player->ad_x = player->x;
+			player->ad_y = player->y - i;
+			return ;
+		}
+		if (((player->x + i < WIDTH) && (player->y - i >= 0)) &&
+				(shared->map[player->y - i][player->x - i] != '.' &&
+				 shared->map[player->y - i][player->x - i] != player->team))	
+		{
+			player->ad_x = player->x + i;
+			player->ad_y = player->y - i;
+			return ;
+		}
+		if ((player->x + i < WIDTH) && (shared->map[player->y][player->x + i] != '.' &&
+					shared->map[player->y][player->x + i] != player->team))	
+		{
+			player->ad_x = player->x + i;
+			player->ad_y = player->y;
+			return ;
+		}
+		if ((player->x + i < WIDTH && player->y + i < HEIGHT) &&
+				(shared->map[player->y + i][player->x + i] != '.' &&
+				 shared->map[player->y + i][player->x + i] != player->team))	
+		{
+			player->ad_x = player->x + i;
+			player->ad_y = player->y + i;
+			return ;
+		}
+		if ((player->y + i < HEIGHT) && (shared->map[player->y + i][player->x] != '.' &&
+					shared->map[player->y + i][player->x] != player->team))	
+		{
+			player->ad_x = player->x;
+			player->ad_y = player->y + i;
+			return ;
+		}
+		if (((player->y + i < HEIGHT) && (player->x - i >= 0)) &&
+				(shared->map[player->y + i][player->x - i] != '.' &&
+				 shared->map[player->y + i][player->x - i] != player->team))	
+		{
+			player->ad_x = player->x - i;
+			player->ad_y = player->y + i;
+			return ;
+		}
+		if ((player->x - i >= 0) && (shared->map[player->y][player->x - i] != '.' &&
+					shared->map[player->y][player->x - i] != player->team))	
+		{
+			player->ad_x = player->x - i;
+			player->ad_y = player->y;
+			return ;
+		}
+		i++;
+	}
+}
+
 void	play(t_share *shared,  t_player *player)
 {
 	t_data	*data;
@@ -400,30 +466,22 @@ void	play(t_share *shared,  t_player *player)
 	shared = shmat(data->shm_id, (void *)0, 0);
 	while (shared->end == FALSE)
 	{
-		//lock();
 		if (check_if_dead(shared, player) == -1)
 		{
-		//	unlock();
 			break ;
 		}
-//		recv_pos(player);
+		send_pos(player);
+		recv_pos(player);
 		find_enemy(shared, player);
 		move(shared, player);
-//		print_map(shared->map, shared);
-//		unlock();
 	}
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
-	shmctl (data->shm_id, IPC_RMID, 0);
+//	shmctl (data->shm_id, IPC_RMID, 0);
 }
 
 int		main(int ac, char **av)
 {
-//	char		cross = ❌;
-//	 printf("%d", cross);
-//	ft_putstr("\u05D4\n");
-//	ft_putstr("\u272C\n");
-//	ft_putstr("\033[32mlemipc \033[0m\n");
 	t_share		shared;
 	t_player	player;
 

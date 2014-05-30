@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/30 18:51:35 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/30 23:54:38 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ typedef struct		s_data
 {
 	int				key;
 	int				shm_id;
+	int				sem_id;
+	int				array[WIDTH * HEIGHT];
 }					t_data;
 
 #endif
