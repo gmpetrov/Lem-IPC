@@ -6,10 +6,11 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 22:04:37 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/30 19:32:08 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <time.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -19,6 +20,15 @@
 #include <sys/sem.h>
 #include <sys/msg.h>
 #include "lemipc.h"
+
+t_data			*init_data(void)
+{
+	static t_data		*data = NULL;
+
+	if (data == NULL)
+		data = (t_data *)malloc(sizeof(t_data));
+	return (data);
+}
 
 char			is_locked(void)
 {
@@ -33,10 +43,12 @@ char			is_locked(void)
 int			sem_init(void)
 {
   static int		semid = 0;
+  t_data			*data;
 
+  data = init_data();
   if (semid == 0)
     {
-      if ((semid = semget(KEY, 1, IPC_CREAT | 0666)) == -1)
+      if ((semid = semget(data->key, 1, IPC_CREAT | 0666)) == -1)
 		exit_error("semget() error\n");
       if (semctl(semid, 0, SETVAL, 1) == -1)
 		exit_error("semctl() error\n");
@@ -102,35 +114,41 @@ void	print_map(char map[HEIGHT][WIDTH], t_share *shared)
 	}
 }
 
-int		init_shm(t_share *shared)
+void		init_shm(t_share *shared)
 {
-	int			shm_id;
+	char		*pwd;
+	t_data		*data;
 
-	if ((shm_id = shmget(KEY, sizeof(shared) * HEIGHT * WIDTH, 0644 | IPC_CREAT)) == -1)
-		exit_error("shmget() error\n");
-	shared = shmat(shm_id, (void *)0, 0);
-	if (shared == (t_share *)-1)
-		exit_error("shmat error\n");
-	if (shared->first == TRUE)
+	data = init_data();
+	pwd = getwd(NULL);
+	data->key = ftok(pwd, 0);
+	printf("KEY = %d\n", data->key);
+	size_t size = sizeof(t_share);
+	ft_putnbr(size);
+	if ((data->shm_id = shmget(data->key, sizeof(struct s_share), 0666)) == -1)
 	{
-		printf("OK\n");
-		lock();
-		print_map(shared->map, shared);
-		unlock();
+		if ((data->shm_id = shmget(data->key, sizeof(t_share), 0666 | IPC_CREAT)))
+		{
+			ft_putnbr(data->shm_id);
+			ft_putstr("\n\t");
+			shared = shmat(data->shm_id, (void *)0, 0);
+			if (shared == (t_share *)-1)
+				exit_error("shmat error1\n");
+			printf("Creating GameP\n");
+			team_handle_init(shared);
+			shared->nb_team = 0;
+			fill_map(shared);
+			//		print_map(shared->map, shared);
+			shared->end = FALSE;
+			shared->first = TRUE;
+			if (shmdt(shared) == -1)
+				exit_error("shmdt() error\n");
+		}
+		else
+			exit_error("FUCK YOU BITCH I WANT TO EAT JAPANESE\n");
 	}
 	else
-	{
-		printf("Creating GameP\n");
-		team_handle_init(shared);
-		shared->nb_team = 0;
-		fill_map(shared);
-		print_map(shared->map, shared);
-		shared->end = FALSE;
-		shared->first = TRUE;
-	}
-	if (shmdt(shared) == -1)
-		exit_error("shmdt() error\n");
-	return (shm_id);
+		printf("OK\n");
 }
 
 void	register_team(t_share *shared, t_player *player)
@@ -197,18 +215,20 @@ void	put_player_on_map(t_share *shared, t_player *player)
 	*/
 }
 
-void	create_player(t_share *shared, int shm_id, t_player *player)
+void	create_player(t_share *shared, t_player *player)
 {
 	int		i;
+	t_data	*data;
 
+	data = init_data();
 	i = 0;
-	lock();
-	shared = shmat(shm_id, (void *)0, 0);
+//	lock();
+	shared = shmat(data->shm_id, (void *)0, 0);
 	register_team(shared, player);
 	put_player_on_map(shared, player);
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
-	unlock();
+//	unlock();
 }
 
 void	test(t_share *shared, int shm_id)
@@ -274,9 +294,11 @@ void	send_pos(t_player *player)
 
 	t_msgbuf	buf;
 	int			msg_id;
+	t_data		*data;
 
+	data = init_data();
 	(void)player;
-	if ((msg_id = msgget(KEY, 0666 | IPC_CREAT)) < 0)
+	if ((msg_id = msgget(data->key, 0666 | IPC_CREAT)) < 0)
 		exit_error("msgget() error\n");
 	buf.mtype = (int)player->team;
 	ft_strncpy(buf.mtext, "salut", 5);
@@ -289,8 +311,10 @@ void	recv_pos(t_player *player)
 {
 	int			msg_id;
 	t_msgbuf	buf;
+	t_data		*data;
 
-	if ((msg_id = msgget(KEY, 0666)) < 0)
+	data = init_data();
+	if ((msg_id = msgget(data->key, 0666)) < 0)
 		exit_error("msgget() error\n");
 	if (msgrcv(msg_id, &buf, MAX_SIZE, (int)player->team, 0) < 0)
 		exit_error("msgrcv() error\n");	
@@ -364,29 +388,33 @@ int		check_if_dead(t_share *shared, t_player *player)
 	return (0);
 }
 
-void	play(t_share *shared, int shm_id, t_player *player)
+void	play(t_share *shared,  t_player *player)
 {
+	t_data	*data;
+
+	data = init_data();
 	player->danger = FALSE;
 	player->attack = FALSE;
-	player->ad_x = 0;
-	player->ad_y = 0;
-	shared = shmat(shm_id, (void *)0, 0);
+	player->ad_x = 200;
+	player->ad_y = 200;
+	shared = shmat(data->shm_id, (void *)0, 0);
 	while (shared->end == FALSE)
 	{
-		lock();
+		//lock();
 		if (check_if_dead(shared, player) == -1)
 		{
-			unlock();
+		//	unlock();
 			break ;
 		}
 //		recv_pos(player);
 		find_enemy(shared, player);
 		move(shared, player);
-		print_map(shared->map, shared);
-		unlock();
+//		print_map(shared->map, shared);
+//		unlock();
 	}
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
+	shmctl (data->shm_id, IPC_RMID, 0);
 }
 
 int		main(int ac, char **av)
@@ -398,14 +426,13 @@ int		main(int ac, char **av)
 //	ft_putstr("\033[32mlemipc \033[0m\n");
 	t_share		shared;
 	t_player	player;
-	int			shm_id;
 
 	if (ac != 2)
 		exit_error("[USAGE] - ./lemipc <team>\n");
 	player.team = av[1][0];
 	printf("%c\n", player.team);
-	shm_id = init_shm(&shared);
-	create_player(&shared, shm_id, &player);
-	play(&shared, shm_id, &player);
+	init_shm(&shared);
+	create_player(&shared, &player);
+	play(&shared, &player);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 18:55:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 20:08:52 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/30 18:19:04 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@
 
 int		init_shm(t_share *shared)
 {
-	int	shm_id;
+	char	*pwd;
+	int		key;
+	int		shm_id;
 
-	if ((shm_id = shmget(KEY, sizeof(shared), 0644 | IPC_CREAT)) == -1)
+	pwd = getwd(NULL);
+	key = ftok(pwd, 0);
+	if ((shm_id = shmget(key, sizeof(shared), 0644 | IPC_CREAT)) == -1)
 		perror("shmget() error\n");
 	return (shm_id);
 }

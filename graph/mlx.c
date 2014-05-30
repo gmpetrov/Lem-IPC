@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 19:31:37 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/29 21:29:38 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/30 17:25:24 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	*eb_mlx(int	shm_id, t_share *shared)
 	env = env_init();
 	img = img_init();
 	mlx_key_hook(env->win, eb_mlx_key_hook, NULL);
-	mlx_expose_hook(env->win, eb_expose_hook, img);
-	mlx_loop_hook(env->mlx, eb_loop_hook, img);
+	mlx_expose_hook(env->win, eb_expose_hook, shared);
+	mlx_loop_hook(env->mlx, eb_loop_hook, shared);
 	mlx_loop(env->mlx);
 	return (NULL);
 }
@@ -48,50 +48,51 @@ int		eb_mlx_key_hook(int keycode)
 	return (0);
 }
 
-int		eb_expose_hook(t_img *img)
+int		eb_expose_hook(t_share *shared)
 {
 	t_win		*env;
+	t_img		*img;
 
+	usleep(10000);
+	img = img_init();
 	env = env_init();
-	img->x = 50;
-
+	(void)shared;
+//	img->x = 50;
 	int		i;
 	int		j;
 	i = 0;
 	j = 0;
-	while (j < 200)
+	while (j < HEIGHT)
 	{
-		while (i < 200)
+		while (i < WIDTH)
 		{
-			eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
+			if (shared->map[j][i] == shared->team[0])
+				eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
+			else if ((shared->map[j][i] == shared->team[1]) && (shared->team[1] != '.'))
+				eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));	
+			else
+				eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 0));
+			/*
+			if (shared->map[j][i] == shared->team[0])
+				eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
+			else if (shared->map[j][i] == shared->team[1])
+				eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));
+			else
+				eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 0));
+				*/
 			i++;
 		}
 		i = 0;
 		j++;
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img->img, 0, 0);
-	i = 0;
-	j = 0;
-	while (j < 200)
-	{
-		while (i < 200)
-		{
-			eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));
-			i++;
-		}
-		i = 0;
-		j++;
-	}
-	mlx_put_image_to_window(env->mlx, env->win, img->img, 0, 0);
-
-
 //	show_philo(env, img);
 	return (0);
 }
 
-int		eb_loop_hook(t_img *img)
+int		eb_loop_hook(t_share *shared)
 {
-	eb_expose_hook(img);
+	eb_expose_hook(shared);
 	return (0);
 }
 
