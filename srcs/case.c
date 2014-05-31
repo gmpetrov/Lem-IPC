@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 16:29:01 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 19:18:26 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 20:20:04 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,21 @@ void	case_2(t_share *shared, t_player *player)
 {
 		
 		if (shared->map[player->y - 1][player->x] != '.')
+		{
+			if (player->x - 1 >= 0 && shared->map[player->y][player->x - 1] == '.')	
+			{	
+				shared->map[player->y][player->x] = '.';
+				player->x -= 1;
+				shared->map[player->y][player->x] = player->team;
+			}
+			else if (player->x + 1 < HEIGHT && shared->map[player->y][player->x + 1] == '.')
+			{	
+				shared->map[player->y][player->x] = '.';
+				player->x += 1;
+				shared->map[player->y][player->x] = player->team;
+			}
 			return ;
+		}
 		shared->map[player->y][player->x] = '.';
 		player->y -= 1;
 		shared->map[player->y][player->x] = player->team;
@@ -75,7 +89,21 @@ void	case_3(t_share *shared, t_player *player)
 void	case_4(t_share *shared, t_player *player)
 {
 		if (shared->map[player->y][player->x + 1] != '.')
+		{
+			if (player->y - 1 >= 0 && shared->map[player->y - 1][player->x] == '.')	
+			{	
+				shared->map[player->y][player->x] = '.';
+				player->y -= 1;
+				shared->map[player->y][player->x] = player->team;
+			}
+			else if (player->y + 1 < HEIGHT && shared->map[player->y + 1][player->x] == '.')
+			{	
+				shared->map[player->y][player->x] = '.';
+				player->y += 1;
+				shared->map[player->y][player->x] = player->team;
+			}
 			return ;
+		}
 		shared->map[player->y][player->x] = '.';
 		player->x += 1;
 		shared->map[player->y][player->x] = player->team;	
@@ -109,7 +137,21 @@ void	case_5(t_share *shared, t_player *player)
 void	case_6(t_share *shared, t_player *player)
 {
 		if (shared->map[player->y][player->x - 1] != '.')
+		{
+			if (player->y - 1 >= 0 && shared->map[player->y - 1][player->x] == '.')	
+			{	
+				shared->map[player->y][player->x] = '.';
+				player->y -= 1;
+				shared->map[player->y][player->x] = player->team;
+			}
+			else if (player->y + 1 < HEIGHT && shared->map[player->y + 1][player->x] == '.')
+			{	
+				shared->map[player->y][player->x] = '.';
+				player->y += 1;
+				shared->map[player->y][player->x] = player->team;
+			}
 			return ;
+		}
 		shared->map[player->y][player->x] = '.';
 		player->x -= 1;
 		shared->map[player->y][player->x] = player->team;	
@@ -143,7 +185,21 @@ void	case_7(t_share *shared, t_player *player)
 void	case_8(t_share *shared, t_player *player)
 {
 	if (shared->map[player->y][player->x - 1] != '.')
+	{
+		if (player->y - 1 >= 0 && shared->map[player->y - 1][player->x] == '.')	
+		{	
+			shared->map[player->y][player->x] = '.';
+			player->y -= 1;
+			shared->map[player->y][player->x] = player->team;
+		}
+		else if (player->y + 1 < HEIGHT && shared->map[player->y + 1][player->x] == '.')
+		{	
+			shared->map[player->y][player->x] = '.';
+			player->y += 1;
+			shared->map[player->y][player->x] = player->team;
+		}
 		return ;
+	}
 	shared->map[player->y][player->x] = '.';
 	player->x -= 1;
 	shared->map[player->y][player->x] = player->team;	

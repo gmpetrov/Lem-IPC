@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 19:31:35 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 20:25:07 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,6 +471,7 @@ void	play(t_share *shared,  t_player *player)
 	shared->nb_player++;
 	while (shared->end == FALSE)
 	{
+		usleep(TIME);
 		if (check_if_dead(shared, player) == -1)
 		{
 			break ;

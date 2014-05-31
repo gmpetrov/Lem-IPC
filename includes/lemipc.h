@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:20:20 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 19:17:48 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 20:28:06 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEMIPC_H
 
 # define KEY_ESC	65307
+# define TIME		10000
 # include "libft.h"
 # include "struct.h"
 
