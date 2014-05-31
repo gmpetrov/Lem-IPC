@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 19:31:37 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 23:05:37 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 01:23:31 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int		eb_expose_hook(t_share *shared)
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img->img, 0, 0);
 	if (shared->end == TRUE)
-		mlx_string_put(env->mlx, env->win, WIDTH, HEIGHT, color_norm(0, 255, 255),
+		mlx_string_put(env->mlx, env->win, WIDTH / 2, HEIGHT / 2, color_norm(0, 255, 255),
 						"THE END");
 	return (0);
 }
@@ -138,10 +138,10 @@ void	eb_clean_map(t_img *img)
 	int		y;
 
 	x = 0;
-	while (x <= WIDTH * 2)
+	while (x <= WIDTH)
 	{
 		y = 0;
-		while (y <= HEIGHT * 2)
+		while (y <= HEIGHT)
 		{
 			eb_put_pixel_to_img(img, x, y, 0x000000);
 			y++;

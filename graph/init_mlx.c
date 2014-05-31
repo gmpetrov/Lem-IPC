@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 19:35:49 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 20:37:01 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 01:21:33 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_win		*env_init(void)
 		if (!(win = (t_win *)malloc(sizeof(t_win))))
 			perror("erreur malloc\n");
 		win->mlx = mlx_init();
-		win->win = mlx_new_window(win->mlx, WIDTH * 2, HEIGHT * 2
+		win->win = mlx_new_window(win->mlx, WIDTH, HEIGHT
 			, "Lem-ipc");
 		win->img = img_init();
 	}
@@ -37,7 +37,7 @@ t_img		*img_init(void)
 
 	win = env_init();
 	img = (t_img *)malloc(sizeof(t_img));
-	img->img = mlx_new_image(win->mlx, WIDTH * 2, HEIGHT * 2);
+	img->img = mlx_new_image(win->mlx, WIDTH, HEIGHT);
 	img->data = mlx_get_data_addr(img->img, &img->bpp, &img->size_line
 		, &img->endian);
 	return (img);
