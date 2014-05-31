@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:20:20 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 20:28:06 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 00:42:51 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,26 @@
 # include "libft.h"
 # include "struct.h"
 
-
-t_data	*init_data(void);
-
 /*
 **	Prototypes
 */
 
-void	print_map(char map[HEIGHT][WIDTH], t_share *shared);
-void	create_player(t_share *shared, t_player *player);
+/*
+**	main.c
+*/
+
+void	move(t_share *shared, t_player *player);
+void	find_enemy(t_share *shared, t_player *player);
+void	play(t_share *shared,  t_player *player);
 
 /*
 **	tools.c
 */
 
+int		check_nb_team(t_share *shared, t_player *player);
 void	exit_error(char *msg);
+t_data	*init_data(void);
+void	put_player_on_map(t_share *shared, t_player *player);
 
 /*
 **	init.c
@@ -41,23 +46,58 @@ void	exit_error(char *msg);
 char	**create_map(void);
 void	fill_map(t_share *shared);
 void	team_handle_init(t_share *shared);
+void	create_player(t_share *shared, t_player *player);
+void	register_team(t_share *shared, t_player *player);
+
+/*
+**	init_shm.c
+*/
+void	initshm(t_share *shared);
+void	init_shm_sub(t_share *shared);
+
+/*
+**	check_if_dead.c
+*/
+
+int		check_if_dead(t_share *shared, t_player *player);
+void	dead_case_1_to_4(t_share *shared, t_player *player, int *nb);
+void	dead_case_5_to_8(t_share *shared, t_player *player, int *nb);
+
+/*
+**	semaphore.c
+*/
+
+void	create_sem(void);
+void	lock(void);
+void	unlock(void);
 int		sem_init(void);
 char	is_locked(void);
 
 /*
-**	case.c
+**	msgq.c
+*/
+void	recv_pos(t_player *player);
+void	send_pos(t_player *player);
+
+/*
+**	case_1_to_4.c
 */
 
 void	case_1(t_share *shared, t_player *player);
 void	case_2(t_share *shared, t_player *player);
 void	case_3(t_share *shared, t_player *player);
 void	case_4(t_share *shared, t_player *player);
+/*
+**	case_5_to_8.c
+*/
 void	case_5(t_share *shared, t_player *player);
 void	case_6(t_share *shared, t_player *player);
 void	case_7(t_share *shared, t_player *player);
 void	case_8(t_share *shared, t_player *player);
 
-
+/*
+**	graph/
+*/
 void	*eb_mlx(int shm_id, t_share *shared);
 int		eb_mlx_key_hook(int keycode);
 int		eb_expose_hook(t_share *shared);

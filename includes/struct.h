@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 21:41:24 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 23:31:47 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 typedef struct		s_share
 {
 	char			map[HEIGHT][WIDTH];
-	int				first;
 	char			team[MAX_TEAM + 1];
 	int				nb_team;
 	int				nb_player;

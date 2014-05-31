@@ -6,12 +6,13 @@
 #    By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/05/26 19:06:18 by gpetrov           #+#    #+#              #
-#    Updated: 2014/05/31 18:21:30 by gpetrov          ###   ########.fr        #
+#    Updated: 2014/06/01 00:42:40 by gpetrov          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= lemipc
-FILES	= main.c case.c init.c tools.c
+FILES	= main.c case.c init.c tools.c semaphore.c msgq.c check_if_dead.c \
+		  init_shm.c
 FILES_G	= main.c mlx.c init_mlx.c print_pixel.c
 SRCS	= $(addprefix srcs/, $(FILES))
 SRCS_G	= $(addprefix graph/, $(FILES_G))
