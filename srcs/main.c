@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 00:42:31 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 01:06:10 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	play(t_share *shared,  t_player *player)
 	player->ad_y = 200;
 	shared = shmat(data->shm_id, (void *)0, 0);
 	shared->nb_player++;
+	sleep(2);
 	while (shared->end == FALSE)
 	{
 		usleep(TIME);
