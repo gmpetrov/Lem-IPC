@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 19:31:37 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 19:18:58 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 20:46:57 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int		eb_expose_hook(t_share *shared)
 	img = img_init();
 	env = env_init();
 	(void)shared;
-//	img->x = 50;
 	int		i;
 	int		j;
 	i = 0;
@@ -67,11 +66,21 @@ int		eb_expose_hook(t_share *shared)
 		while (i < WIDTH)
 		{
 			if (shared->map[j][i] == shared->team[0])
+			{
 				eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
+				eb_put_pixel_to_img(img, i + 1, j, color_norm(255, 0, 0));
+				eb_put_pixel_to_img(img, i, j + 1, color_norm(255, 0, 0));
+				eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(255, 0, 0));
+			}
 			else if ((shared->map[j][i] == shared->team[1]) && (shared->team[1] != '.'))
+			{
 				eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));	
-			else
-				eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 0));
+				eb_put_pixel_to_img(img, i + 1, j, color_norm(0, 255, 0));	
+				eb_put_pixel_to_img(img, i, j + 1, color_norm(0, 255, 0));	
+				eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(0, 255, 0));	
+			}
+		//	else
+		//		eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 0));
 			/*
 			if (shared->map[j][i] == shared->team[0])
 				eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
@@ -102,10 +111,10 @@ void	eb_clean_map(t_img *img)
 	int		y;
 
 	x = 0;
-	while (x <= WIDTH)
+	while (x <= WIDTH * 2)
 	{
 		y = 0;
-		while (y <= HEIGHT)
+		while (y <= HEIGHT * 2)
 		{
 			eb_put_pixel_to_img(img, x, y, 0x000000);
 			y++;

@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 19:27:39 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 20:46:31 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define STRUC_H
 # define TRUE	1
 # define FALSE	-1
-# define WIDTH	1000
-# define HEIGHT	800
+# define WIDTH	500
+# define HEIGHT	300
 # define MAX_TEAM 100
 # define MAX_SIZE 1024
 # include "lemipc.h"
