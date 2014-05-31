@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 19:31:37 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 20:46:57 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 21:48:30 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,40 @@ int		eb_mlx_key_hook(int keycode)
 	return (0);
 }
 
+void	draw_player_1(t_img *img, int	i, int j)
+{
+	eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
+	eb_put_pixel_to_img(img, i + 1, j, color_norm(255, 0, 0));
+	eb_put_pixel_to_img(img, i, j + 1, color_norm(255, 0, 0));
+	eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(255, 0, 0));
+}
+
+void	draw_player_2(t_img *img, int i, int j)
+{
+	eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));	
+	eb_put_pixel_to_img(img, i + 1, j, color_norm(0, 255, 0));	
+	eb_put_pixel_to_img(img, i, j + 1, color_norm(0, 255, 0));	
+	eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(0, 255, 0));	
+}
+
+void	draw_player_3(t_img *img, int i, int j)
+{
+	eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 255));	
+	eb_put_pixel_to_img(img, i + 1, j, color_norm(0, 0, 255));	
+	eb_put_pixel_to_img(img, i, j + 1, color_norm(0, 0, 255));	
+	eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(0, 0, 255));	
+}
+
 int		eb_expose_hook(t_share *shared)
 {
 	t_win		*env;
 	t_img		*img;
-
-	usleep(10000);
-	img = img_init();
-	env = env_init();
-	(void)shared;
 	int		i;
 	int		j;
+
+	(void)shared;
+	img = img_init();
+	env = env_init();
 	i = 0;
 	j = 0;
 	while (j < HEIGHT)
@@ -66,36 +89,20 @@ int		eb_expose_hook(t_share *shared)
 		while (i < WIDTH)
 		{
 			if (shared->map[j][i] == shared->team[0])
-			{
-				eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
-				eb_put_pixel_to_img(img, i + 1, j, color_norm(255, 0, 0));
-				eb_put_pixel_to_img(img, i, j + 1, color_norm(255, 0, 0));
-				eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(255, 0, 0));
-			}
+				draw_player_1(img, i, j);
 			else if ((shared->map[j][i] == shared->team[1]) && (shared->team[1] != '.'))
-			{
-				eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));	
-				eb_put_pixel_to_img(img, i + 1, j, color_norm(0, 255, 0));	
-				eb_put_pixel_to_img(img, i, j + 1, color_norm(0, 255, 0));	
-				eb_put_pixel_to_img(img, i + 1, j + 1, color_norm(0, 255, 0));	
-			}
-		//	else
-		//		eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 0));
-			/*
-			if (shared->map[j][i] == shared->team[0])
-				eb_put_pixel_to_img(img, i, j, color_norm(255, 0, 0));
-			else if (shared->map[j][i] == shared->team[1])
-				eb_put_pixel_to_img(img, i, j, color_norm(0, 255, 0));
-			else
-				eb_put_pixel_to_img(img, i, j, color_norm(0, 0, 0));
-				*/
+				draw_player_2(img, i, j);
+			else if ((shared->map[j][i] == shared->team[2]) && (shared->team[2] != '.'))
+				draw_player_3(img, i, j);
 			i++;
 		}
 		i = 0;
 		j++;
 	}
 	mlx_put_image_to_window(env->mlx, env->win, img->img, 0, 0);
-//	show_philo(env, img);
+	if (shared->end == TRUE)
+		mlx_string_put(env->mlx, env->win, WIDTH, HEIGHT, color_norm(0, 255, 255),
+						"THE END");
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 20:25:07 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 21:41:44 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void		init_shm(t_share *shared)
 			shared->end = FALSE;
 			shared->first = TRUE;
 			shared->nb_player = 0;
+			shared->kill = 0;
 			//create_sem();
 			if (shmdt(shared) == -1)
 				exit_error("shmdt() error\n");
@@ -346,6 +347,32 @@ void	find_enemy(t_share *shared, t_player *player)
 	}
 }
 
+int		check_nb_team(t_share *shared, t_player *player)
+{
+	int		i;
+	int		j;
+	int		counter;
+
+	i = 0;
+	j = 0;
+	counter = 0;
+	while (j < HEIGHT)
+	{
+		while (i < WIDTH)
+		{
+			if (shared->map[j][i] == player->team)
+			{
+				counter++;
+				return (FALSE);
+			}
+			i++;
+		}
+		i = 0;
+		j++;
+	}
+	return (TRUE);
+}
+
 int		check_if_dead(t_share *shared, t_player *player)
 {
 	int		nb;
@@ -382,6 +409,8 @@ int		check_if_dead(t_share *shared, t_player *player)
 	if (nb >= 2)
 	{
 		shared->map[player->y][player->x] = '.';
+		if (check_nb_team(shared, player) == TRUE)
+			shared->nb_team--;
 		return (-1);
 	}
 	return (0);
@@ -458,6 +487,7 @@ void	find_closest_enemy(t_share *shared, t_player *player )
 	}
 }
 
+
 void	play(t_share *shared,  t_player *player)
 {
 	t_data	*data;
@@ -472,8 +502,14 @@ void	play(t_share *shared,  t_player *player)
 	while (shared->end == FALSE)
 	{
 		usleep(TIME);
+		if (shared->kill == TRUE)
+		{
+			if (shared->nb_team == 1)
+				shared->end = TRUE;
+		}
 		if (check_if_dead(shared, player) == -1)
 		{
+			shared->kill = TRUE;
 			break ;
 		}
 //		send_pos(player);
@@ -482,9 +518,18 @@ void	play(t_share *shared,  t_player *player)
 		move(shared, player);
 	}
 	shared->nb_player--;
-	if (shmdt(shared) == -1)
+	if (shared->end == TRUE && shared->nb_player == 0)
+	{
+		shared->winner = player->team;
+		if (shmdt(shared) == -1)
+			exit_error("shmdt() error\n");
+		shmctl (data->shm_id, IPC_RMID, 0);
+	}
+	else 
+	{	
+		if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
-//	shmctl (data->shm_id, IPC_RMID, 0);
+	}
 }
 
 int		main(int ac, char **av)
