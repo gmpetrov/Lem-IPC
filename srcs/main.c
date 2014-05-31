@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 00:03:41 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 19:31:35 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ void		init_shm(t_share *shared)
 			//		print_map(shared->map, shared);
 			shared->end = FALSE;
 			shared->first = TRUE;
+			shared->nb_player = 0;
 			//create_sem();
 			if (shmdt(shared) == -1)
 				exit_error("shmdt() error\n");
@@ -308,7 +309,10 @@ void	recv_pos(t_player *player)
 	//		exit_error("msgget() error\n");
 	}
 	if ((r = msgrcv(msg_id, &buf, MAX_SIZE, player->team, IPC_NOWAIT)) < 0)
-		exit_error("msgrcv() error\n");
+	{
+		return ;
+	//	exit_error("msgrcv() error\n");
+	}
 	if (r > 0)
 	{
 		printf("r = %d\n", r);
@@ -464,17 +468,19 @@ void	play(t_share *shared,  t_player *player)
 	player->ad_x = 200;
 	player->ad_y = 200;
 	shared = shmat(data->shm_id, (void *)0, 0);
+	shared->nb_player++;
 	while (shared->end == FALSE)
 	{
 		if (check_if_dead(shared, player) == -1)
 		{
 			break ;
 		}
-		send_pos(player);
-		recv_pos(player);
+//		send_pos(player);
+//		recv_pos(player);
 		find_enemy(shared, player);
 		move(shared, player);
 	}
+	shared->nb_player--;
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
 //	shmctl (data->shm_id, IPC_RMID, 0);

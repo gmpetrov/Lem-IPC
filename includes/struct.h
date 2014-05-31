@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/30 23:54:38 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/05/31 19:27:39 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct		s_share
 	int				first;
 	char			team[MAX_TEAM + 1];
 	int				nb_team;
+	int				nb_player;
 	int				end;
 }					t_share;
 

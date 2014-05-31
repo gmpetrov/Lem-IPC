@@ -6,7 +6,7 @@
 #    By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/05/26 19:06:18 by gpetrov           #+#    #+#              #
-#    Updated: 2014/05/30 17:31:13 by gpetrov          ###   ########.fr        #
+#    Updated: 2014/05/31 18:21:30 by gpetrov          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,8 @@ CC		= cc
 all: $(NAME)
 
 $(NAME): libft_comp create_fold_obj $(OBJS) $(OBJS_G)
-	@$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(INC) $(LIB) $(LIBMLX) -g 
-	@$(CC) $(FLAGS) $(OBJS_G) -o graphique $(INC) $(LIB) $(LIBMLX) -g
+	@$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(INC) $(LIB) $(LIBMLX)
+	@$(CC) $(FLAGS) $(OBJS_G) -o graphique $(INC) $(LIB) $(LIBMLX)
 	@echo "\n > \033[36m$(NAME)\033[m project compilation [\033[32mDONE\033[m]\n"
 
 .obj/%.o: srcs/%.c
