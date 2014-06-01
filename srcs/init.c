@@ -48,7 +48,6 @@ void	fill_map(t_share *shared)
 		i++;
 		j = 0;
 	}
-
 }
 
 void	team_handle_init(t_share *shared)

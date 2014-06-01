@@ -16,7 +16,6 @@
 
 void	send_pos(t_player *player)
 {
-
 	t_msgbuf	buf;
 	int			msg_id;
 	t_data		*data;
@@ -42,12 +41,10 @@ void	recv_pos(t_player *player)
 	if ((msg_id = msgget(data->key, 0666)) < 0)
 	{
 		return ;
-	//		exit_error("msgget() error\n");
 	}
 	if ((r = msgrcv(msg_id, &buf, MAX_SIZE, player->team, IPC_NOWAIT)) < 0)
 	{
 		return ;
-	//	exit_error("msgrcv() error\n");
 	}
 	if (r > 0)
 	{

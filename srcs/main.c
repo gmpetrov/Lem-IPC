@@ -21,7 +21,7 @@
 void	move(t_share *shared, t_player *player)
 {
 	if (player->ad_x < player->x && player->ad_y < player->y)
-	   case_1(shared, player);
+		case_1(shared, player);
 	else if (player->ad_x == player->x && player->ad_y < player->y)
 		case_2(shared, player);
 	else if (player->ad_x > player->x && player->ad_y < player->y)
@@ -34,7 +34,7 @@ void	move(t_share *shared, t_player *player)
 		case_6(shared, player);
 	else if (player->ad_x < player->x && player->ad_y > player->y)
 		case_7(shared, player);
-	else if (player->ad_x < player->x && player->ad_y == player->y)	
+	else if (player->ad_x < player->x && player->ad_y == player->y)
 		case_8(shared, player);
 }
 
@@ -53,7 +53,6 @@ void	find_enemy(t_share *shared, t_player *player)
 			{
 				player->ad_x = i;
 				player->ad_y = j;
-			//	send_pos(player);
 				player->attack = TRUE;
 				return ;
 			}
@@ -64,7 +63,7 @@ void	find_enemy(t_share *shared, t_player *player)
 	}
 }
 
-void	play(t_share *shared,  t_player *player)
+void	play(t_share *shared, t_player *player)
 {
 	t_data	*data;
 
@@ -89,8 +88,6 @@ void	play(t_share *shared,  t_player *player)
 			shared->kill = TRUE;
 			break ;
 		}
-//		send_pos(player);
-//		recv_pos(player);
 		find_enemy(shared, player);
 		move(shared, player);
 	}
@@ -102,10 +99,10 @@ void	play(t_share *shared,  t_player *player)
 			exit_error("shmdt() error\n");
 		shmctl (data->shm_id, IPC_RMID, 0);
 	}
-	else 
-	{	
+	else
+	{
 		if (shmdt(shared) == -1)
-		exit_error("shmdt() error\n");
+			exit_error("shmdt() error\n");
 	}
 }
 

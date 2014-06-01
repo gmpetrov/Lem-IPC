@@ -14,13 +14,13 @@
 #include <stdio.h>
 #include "lemipc.h"
 
-void	exit_error(char *msg)
+void		exit_error(char *msg)
 {
 	printf("\033[31m%s\033[0m", msg);
 	exit(0);
 }
 
-t_data			*init_data(void)
+t_data		*init_data(void)
 {
 	static t_data		*data = NULL;
 
@@ -29,7 +29,7 @@ t_data			*init_data(void)
 	return (data);
 }
 
-void	put_player_on_map(t_share *shared, t_player *player)
+void		put_player_on_map(t_share *shared, t_player *player)
 {
 	int		i;
 	int		j;
@@ -51,7 +51,7 @@ void	put_player_on_map(t_share *shared, t_player *player)
 	}
 }
 
-int		check_nb_team(t_share *shared, t_player *player)
+int			check_nb_team(t_share *shared, t_player *player)
 {
 	int		i;
 	int		j;

@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:20:20 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 00:42:51 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 18:35:11 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	recv_pos(t_player *player);
 void	send_pos(t_player *player);
 
 /*
-**	case_1_to_4.c
+**	case.c
 */
 
 void	case_1(t_share *shared, t_player *player);
@@ -88,7 +88,7 @@ void	case_2(t_share *shared, t_player *player);
 void	case_3(t_share *shared, t_player *player);
 void	case_4(t_share *shared, t_player *player);
 /*
-**	case_5_to_8.c
+**	case2.c
 */
 void	case_5(t_share *shared, t_player *player);
 void	case_6(t_share *shared, t_player *player);
@@ -98,6 +98,17 @@ void	case_8(t_share *shared, t_player *player);
 /*
 **	graph/
 */
+
+/*
+**	draw_player.c
+*/
+
+void	draw_player_1(t_img *img, int	i, int j);
+void	draw_player_2(t_img *img, int	i, int j);
+void	draw_player_3(t_img *img, int	i, int j);
+void	draw_player_4(t_img *img, int	i, int j);
+void	draw_player_5(t_img *img, int	i, int j);
+
 void	*eb_mlx(int shm_id, t_share *shared);
 int		eb_mlx_key_hook(int keycode);
 int		eb_expose_hook(t_share *shared);

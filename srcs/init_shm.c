@@ -29,7 +29,6 @@ void		init_shm_sub(t_share *shared)
 	shared->end = FALSE;
 	shared->nb_player = 0;
 	shared->kill = 0;
-	//create_sem();
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
 }

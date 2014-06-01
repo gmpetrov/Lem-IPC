@@ -16,17 +16,17 @@ void	dead_case_1_to_4(t_share *shared, t_player *player, int *nb)
 {
 	if (((player->x - 1 >= 0) && (player->y - 1 >= 0)) &&
 			(shared->map[player->y - 1][player->x - 1] != '.' &&
-			 shared->map[player->y - 1][player->x - 1] != player->team))
+			shared->map[player->y - 1][player->x - 1] != player->team))
 		*nb += 1;
-	if ((player->y - 1 >= 0) && (shared->map[player->y - 1][player->x] != '.' &&
-			shared->map[player->y - 1][player->x] != player->team))
+	if ((player->y - 1 >= 0) && (shared->map[player->y - 1][player->x]
+		!= '.' && shared->map[player->y - 1][player->x] != player->team))
 		*nb += 1;
 	if (((player->x + 1 < WIDTH) && (player->y - 1 >= 0)) &&
 			(shared->map[player->y - 1][player->x - 1] != '.' &&
-			 shared->map[player->y - 1][player->x - 1] != player->team))
+			shared->map[player->y - 1][player->x - 1] != player->team))
 		*nb += 1;
-	if ((player->x + 1 < WIDTH) && (shared->map[player->y][player->x + 1] != '.' &&
-				shared->map[player->y][player->x + 1] != player->team))
+	if ((player->x + 1 < WIDTH) && (shared->map[player->y][player->x + 1]
+		!= '.' && shared->map[player->y][player->x + 1] != player->team))
 		*nb += 1;
 }
 
@@ -34,18 +34,18 @@ void	dead_case_5_to_8(t_share *shared, t_player *player, int *nb)
 {
 	if ((player->x + 1 < WIDTH && player->y + 1 < HEIGHT) &&
 			(shared->map[player->y + 1][player->x + 1] != '.' &&
-			 shared->map[player->y + 1][player->x + 1] != player->team))
+			shared->map[player->y + 1][player->x + 1] != player->team))
 		*nb += 1;
-	if ((player->y + 1 < HEIGHT) && (shared->map[player->y + 1][player->x] != '.' &&
-				shared->map[player->y + 1][player->x] != player->team))
+	if ((player->y + 1 < HEIGHT) && (shared->map[player->y + 1][player->x]
+		!= '.' && shared->map[player->y + 1][player->x] != player->team))
 		*nb += 1;
 	if (((player->y + 1 < HEIGHT) && (player->x - 1 >= 0)) &&
 			(shared->map[player->y + 1][player->x - 1] != '.' &&
 			shared->map[player->y + 1][player->x - 1] != player->team))
 		*nb += 1;
-	if ((player->x - 1 >= 0) && (shared->map[player->y][player->x - 1] != '.' &&
-				shared->map[player->y][player->x - 1] != player->team))
-		*nb += 1;	
+	if ((player->x - 1 >= 0) && (shared->map[player->y][player->x - 1]
+		!= '.' && shared->map[player->y][player->x - 1] != player->team))
+		*nb += 1;
 }
 
 int		check_if_dead(t_share *shared, t_player *player)
