@@ -6,12 +6,12 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/05/31 23:31:47 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 19:09:23 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
-# define STRUC_H
+# define STRUCT_H
 # define TRUE	1
 # define FALSE	-1
 # define WIDTH	500
@@ -44,8 +44,8 @@ typedef struct		s_player
 
 typedef struct		s_msgbuf
 {
-    long			mtype;
-    char			mtext[MAX_SIZE];
+	long			mtype;
+	char			mtext[MAX_SIZE];
 }					t_msgbuf;
 
 typedef struct		s_win

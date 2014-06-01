@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:20:20 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 18:35:11 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 19:08:22 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 void	move(t_share *shared, t_player *player);
 void	find_enemy(t_share *shared, t_player *player);
-void	play(t_share *shared,  t_player *player);
+void	play(t_share *shared, t_player *player);
 
 /*
 **	tools.c
