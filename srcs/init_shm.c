@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/06/01 00:32:15 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 00:42:36 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 23:01:07 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void		init_shm_sub(t_share *shared)
 	t_data	*data;
 
 	data = init_data();
-	shared = shmat(data->shm_id, (void *)0, 0);
-	if (shared == (t_share *)-1)
-		exit_error("shmat error1\n");
+	shared = shmat(data->shm_id, 0, 0);
+	if (shared == (void *)-1)
+		exit_error("shmat error\n");
 	printf("Creating GameP\n");
 	team_handle_init(shared);
 	shared->nb_team = 0;
@@ -29,6 +29,8 @@ void		init_shm_sub(t_share *shared)
 	shared->end = FALSE;
 	shared->nb_player = 0;
 	shared->kill = 0;
+	create_sem();
+	shared->sem_id = data->sem_id;
 	if (shmdt(shared) == -1)
 		exit_error("shmdt() error\n");
 }

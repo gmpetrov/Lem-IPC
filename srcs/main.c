@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:21:18 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 01:06:10 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 23:35:52 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,42 +68,12 @@ void	play(t_share *shared, t_player *player)
 	t_data	*data;
 
 	data = init_data();
-	player->danger = FALSE;
-	player->attack = FALSE;
-	player->ad_x = 200;
-	player->ad_y = 200;
 	shared = shmat(data->shm_id, (void *)0, 0);
-	shared->nb_player++;
-	sleep(2);
+	init_play(shared, player);
+	data = init_data();
 	while (shared->end == FALSE)
-	{
-		usleep(TIME);
-		if (shared->kill == TRUE)
-		{
-			if (shared->nb_team == 1)
-				shared->end = TRUE;
-		}
-		if (check_if_dead(shared, player) == -1)
-		{
-			shared->kill = TRUE;
-			break ;
-		}
-		find_enemy(shared, player);
-		move(shared, player);
-	}
-	shared->nb_player--;
-	if (shared->end == TRUE && shared->nb_player == 0)
-	{
-		shared->winner = player->team;
-		if (shmdt(shared) == -1)
-			exit_error("shmdt() error\n");
-		shmctl (data->shm_id, IPC_RMID, 0);
-	}
-	else
-	{
-		if (shmdt(shared) == -1)
-			exit_error("shmdt() error\n");
-	}
+		play_loop(shared, player);
+	end(shared, player);
 }
 
 int		main(int ac, char **av)

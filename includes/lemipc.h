@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/26 19:20:20 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 19:08:22 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 23:17:35 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int		check_nb_team(t_share *shared, t_player *player);
 void	exit_error(char *msg);
 t_data	*init_data(void);
 void	put_player_on_map(t_share *shared, t_player *player);
+void	init_play(t_share *shared, t_player *player);
 
 /*
 **	init.c
@@ -70,8 +71,8 @@ void	dead_case_5_to_8(t_share *shared, t_player *player, int *nb);
 void	create_sem(void);
 void	lock(void);
 void	unlock(void);
-int		sem_init(void);
 char	is_locked(void);
+void	set_sem_value(void);
 
 /*
 **	msgq.c
@@ -95,6 +96,12 @@ void	case_6(t_share *shared, t_player *player);
 void	case_7(t_share *shared, t_player *player);
 void	case_8(t_share *shared, t_player *player);
 
+/*
+**	tools2.c
+*/
+
+void	end(t_share *shared, t_player *player);
+void	play_loop(t_share *shared, t_player *player);
 /*
 **	graph/
 */

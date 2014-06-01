@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/06/01 00:01:01 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 00:03:17 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 23:00:43 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,63 +14,56 @@
 #include <sys/sem.h>
 #include "lemipc.h"
 
-char			is_locked(void)
+void	lock(void)
 {
-	int			val;
-
-	val = semctl(sem_init(), 0, GETVAL);
-	if (val == -1)
-		exit_error("semctl() error\n");
-	return (val);
-}
-
-int			sem_init(void)
-{
-	static int		semid = 0;
+	struct sembuf	actions[2];
 	t_data			*data;
 
 	data = init_data();
-	if (semid == 0)
-	{
-		if ((semid = semget(data->key, 1, IPC_CREAT | 0666)) == -1)
-			exit_error("semget() error\n");
-		if (semctl(semid, 0, SETVAL, 1) == -1)
-			exit_error("semctl() error\n");
-	}
-	return (semid);
-}
-
-void	lock(void)
-{
-	int		val;
-
-	if (is_locked())
-		return ;
-	val = semctl(sem_init(), 0, SETVAL, 1);
-	if (val == -1)
-		exit_error("semctl() error\n");
+	actions[0].sem_num = 0;
+	actions[0].sem_flg = SEM_UNDO;
+	actions[0].sem_op = 0;
+	actions[1].sem_num = 1;
+	actions[1].sem_flg = SEM_UNDO;
+	actions[1].sem_op = +1;
+	if (semop(data->sem_id, actions, 2) == -1)
+		exit_error("semop() error\n");
 }
 
 void	unlock(void)
 {
-	int		val;
+	struct sembuf	actions[1];
+	t_data			*data;
 
-	if (!is_locked())
-		return ;
-	val = semctl(sem_init(), 0, SETVAL, 0);
-	if (val == -1)
+	data = init_data();
+	actions[0].sem_num = 1;
+	actions[0].sem_flg = SEM_UNDO;
+	actions[0].sem_op = -1;
+	if (semop(data->sem_id, actions, 1) == -1)
+		exit_error("semop() error\n");
+}
+
+void	set_sem_value(void)
+{
+	union semun		init_val;
+	t_data			*data;
+
+	data = init_data();
+	init_val.val = 0;
+	if (semctl(data->sem_id, 0, SETVAL, init_val) == -1)
+		exit_error("semctl() error\n");
+	if (semctl(data->sem_id, 1, SETVAL, init_val) == -1)
 		exit_error("semctl() error\n");
 }
 
-void		create_sem(void)
+void	create_sem(void)
 {
 	t_data	*data;
 
 	data = init_data();
-	if ((data->sem_id = semget(data->key, HEIGHT * WIDTH,
+	if ((data->sem_id = semget(data->key, 2,
 					0666 | IPC_CREAT | IPC_EXCL)) == -1)
 		exit_error("semget() error\n");
-	if (semctl(data->sem_id, 1, SETALL, data->array) == -1)
-		exit_error("semctl() error\n");
+	set_sem_value();
 	printf("Semaphores Created\n");
 }

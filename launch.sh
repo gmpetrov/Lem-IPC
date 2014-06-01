@@ -1,81 +1,57 @@
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./graphique"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./graphique"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc A"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc A"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'
 osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc B"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
-end tell'
-osascript -e 'tell app "Terminal"
-	do script "cd /Volumes/Data/nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC && ./lemipc C"
+	do script "cd /nfs/zfs-student-2/users/2013/gpetrov/Rendu/S2/UNIX_2/Lem-IPC/VOGO/VERIF && ./lemipc B"
 end tell'

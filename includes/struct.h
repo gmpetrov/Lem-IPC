@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/27 14:51:19 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 19:09:23 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 21:29:57 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 # define STRUCT_H
 # define TRUE	1
 # define FALSE	-1
-# define WIDTH	500
-# define HEIGHT	300
-# define MAX_TEAM 100
+# define WIDTH	1000
+# define HEIGHT	800
+# define MAX_TEAM 10
 # define MAX_SIZE 1024
+# include <sys/types.h>
+# include <sys/ipc.h>
+# include <sys/sem.h>
 # include "lemipc.h"
 
 typedef struct		s_share
@@ -29,6 +32,7 @@ typedef struct		s_share
 	int				kill;
 	int				end;
 	char			winner;
+	int				sem_id;
 }					t_share;
 
 typedef struct		s_player
@@ -72,7 +76,7 @@ typedef struct		s_data
 	int				key;
 	int				shm_id;
 	int				sem_id;
-	int				array[WIDTH * HEIGHT];
+	int				sem_val;
 }					t_data;
 
 #endif

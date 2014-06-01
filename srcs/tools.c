@@ -6,13 +6,31 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/29 14:33:11 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 00:22:58 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 23:05:08 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <time.h>
 #include <stdio.h>
 #include "lemipc.h"
+
+void		init_play(t_share *shared, t_player *player)
+{
+	t_data	*data;
+
+	data = init_data();
+	player->danger = FALSE;
+	player->attack = FALSE;
+	player->ad_x = WIDTH / 2;
+	player->ad_y = HEIGHT / 2;
+	shared = shmat(data->shm_id, (void *)0, 0);
+	shared->nb_player++;
+	data->sem_id = shared->sem_id;
+	sleep(2);
+}
 
 void		exit_error(char *msg)
 {

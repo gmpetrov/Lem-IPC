@@ -6,7 +6,7 @@
 /*   By: gpetrov <gpetrov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/06/01 18:44:51 by gpetrov           #+#    #+#             */
-/*   Updated: 2014/06/01 18:45:02 by gpetrov          ###   ########.fr       */
+/*   Updated: 2014/06/01 23:14:36 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	case_5(t_share *shared, t_player *player)
 	dy = player->ad_y - player->y;
 	if (dx <= dy)
 	{
-		if (shared->map[player->y][player->x + 1] != '.')
+		if (player->x + 1 < WIDTH &&
+				shared->map[player->y][player->x + 1] != '.')
 			return ;
 		shared->map[player->y][player->x] = '.';
 		player->x += 1;
@@ -29,7 +30,8 @@ void	case_5(t_share *shared, t_player *player)
 	}
 	else
 	{
-		if (shared->map[player->y + 1][player->x] != '.')
+		if (player->y + 1 < HEIGHT &&
+				shared->map[player->y + 1][player->x] != '.')
 			return ;
 		shared->map[player->y][player->x] = '.';
 		player->y += 1;
@@ -39,7 +41,8 @@ void	case_5(t_share *shared, t_player *player)
 
 void	case_6(t_share *shared, t_player *player)
 {
-	if (shared->map[player->y][player->x - 1] != '.')
+	if (player->x - 1 >= 0 &&
+			shared->map[player->y][player->x - 1] != '.')
 	{
 		if (player->y - 1 >= 0 && shared->map[player->y - 1][player->x] == '.')
 		{
@@ -70,7 +73,8 @@ void	case_7(t_share *shared, t_player *player)
 	dy = player->ad_y - player->y;
 	if (dx <= dy)
 	{
-		if (shared->map[player->y][player->x - 1] != '.')
+		if (player->x - 1 >= 0 &&
+				shared->map[player->y][player->x - 1] != '.')
 			return ;
 		shared->map[player->y][player->x] = '.';
 		player->x -= 1;
@@ -78,7 +82,8 @@ void	case_7(t_share *shared, t_player *player)
 	}
 	else
 	{
-		if (shared->map[player->y + 1][player->x] != '.')
+		if (player->y + 1 < HEIGHT &&
+				shared->map[player->y + 1][player->x] != '.')
 			return ;
 		shared->map[player->y][player->x] = '.';
 		player->y += 1;
@@ -88,7 +93,8 @@ void	case_7(t_share *shared, t_player *player)
 
 void	case_8(t_share *shared, t_player *player)
 {
-	if (shared->map[player->y][player->x - 1] != '.')
+	if (player->x - 1 >= 0 &&
+			shared->map[player->y][player->x - 1] != '.')
 	{
 		if (player->y - 1 >= 0 && shared->map[player->y - 1][player->x] == '.')
 		{
